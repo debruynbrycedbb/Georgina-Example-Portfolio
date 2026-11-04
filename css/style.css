@@ -50,14 +50,29 @@ a { color: inherit; }
 .site-header {
   position: fixed; inset: 0 0 auto 0; z-index: 20;
   display: flex; justify-content: space-between; align-items: baseline;
-  padding: 18px var(--gutter);
+  /* sits a little lower than the very edge of the screen */
+  padding: clamp(28px, 4.5vh, 44px) var(--gutter) 18px;
+  padding-top: max(clamp(28px, 4.5vh, 44px), env(safe-area-inset-top));
   color: var(--ink);
   transition: color .4s ease;
   pointer-events: none;
 }
-.site-header a { pointer-events: auto; text-decoration: none; text-shadow: 0 0 14px rgba(255, 255, 255, .7); }
+/* a soft paper-white wash behind the name, like unpainted paper at the top of the sheet,
+   so it reads clearly over the trees and sky */
+.site-header::before {
+  content: ""; position: absolute; z-index: -1; inset: 0 0 auto 0;
+  height: calc(100% + 70px);
+  background: linear-gradient(to bottom,
+    rgba(246, 241, 230, .9) 0%, rgba(246, 241, 230, .72) 45%, rgba(246, 241, 230, .3) 75%, rgba(246, 241, 230, 0) 100%);
+  transition: opacity .4s ease;
+  pointer-events: none;
+}
+.site-header a {
+  pointer-events: auto; text-decoration: none;
+  text-shadow: 0 0 2px rgba(255, 255, 255, .9), 0 0 12px rgba(255, 255, 255, .85), 0 0 28px rgba(255, 255, 255, .6);
+}
 .wordmark {
-  font: italic 400 clamp(1.3rem, 5.4vw, var(--step-2))/1 var(--serif); letter-spacing: .01em;
+  font: italic 400 clamp(1.55rem, 6.4vw, 2.35rem)/1 var(--serif); letter-spacing: .01em;
   white-space: nowrap;
 }
 .header-link {
@@ -69,6 +84,7 @@ a { color: inherit; }
   background: rgba(246, 241, 230, .88);
   -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
 }
+.is-arrived .site-header::before { opacity: 0; }
 .no-js .site-header, .reduced-motion .site-header { position: absolute; }
 .is-arrived .site-header a { text-shadow: none; }
 
