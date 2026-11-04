@@ -33,7 +33,7 @@ Everything is in `CONFIG` at the top of `js/scene.js`:
 | `smoothing` | lower = floatier scroll |
 | `seed` | change it for a different random arrangement |
 
-The scroll distance itself is `--walk-length` in `css/style.css` (520vh on desktop, 430vh on phones; one screen of that is the scene itself). When the walk ends, the page glides on into the gallery by itself: see `carryToGallery` in `scene.js`.
+The scroll distance itself is `--walk-length` in `css/style.css` (394vh on desktop, 331vh on phones; one screen of that is the scene itself). When the walk ends, the page glides on into the gallery by itself: see `carryToGallery` in `scene.js`.
 
 You can also tune it live in the browser console:
 ```js
@@ -45,16 +45,15 @@ walkScene.config.walkLength = 90; walkScene.redraw();
 - `assets/scene/backdrop.webp`: the watercolour with the path (also shown on its own when reduced motion is on or JavaScript is off)
 - `assets/scene/ground.webp`: top-down ground tile (made by `tools/make_ground.py`)
 - `assets/scene/tree-1…8.webp`: tree cut-outs, with the needle-point base trimmed so they sit on the ground (`-sm` versions are served to phones)
-- `assets/gallery/painting-1…6.webp`: gallery images (`-sm` = grid thumbnails)
+- `assets/gallery/painting-1…11.webp`: gallery images (`-sm` = grid thumbnails)
 
 To add a new tree: export a transparent WebP, add it to `TREES` in `scene.js`, and set `trunkX` to where the trunk meets the ground (as a fraction of the image width).
 
 ## Placeholders to replace
 
 - `[Short introduction to the work, to be supplied]`
-- `[Painting title 1–6]`, `[Year · medium]`, `[Description of painting 1–6]` (alt text)
+- `[Painting title N]` for the paintings that only had a camera file name (IMG_…), and `[Year · medium]` for every painting
 - `[Contact email]`
-- The gallery images themselves are temporary placeholders.
 
 ## Run locally
 

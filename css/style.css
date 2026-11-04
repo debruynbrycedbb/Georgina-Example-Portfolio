@@ -21,7 +21,7 @@
   --step-5: clamp(3.2rem, 9vw, 6.6rem);
 
   --gutter: clamp(16px, 4vw, 48px);
-  --walk-length: 520vh;  /* scroll length of the walk (incl. one screen for the scene itself) */
+  --walk-length: 394vh;  /* scroll length of the walk (incl. one screen for the scene itself) */
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -207,7 +207,7 @@ a { color: inherit; }
 .lb-next { right: 14px; top: 50%; translate: 0 -50%; }
 
 @media (max-width: 640px) {
-  :root { --walk-length: 430vh; }
+  :root { --walk-length: 331vh; }
   .lightbox figure { padding: 64px 12px 84px; }
   .lb-prev, .lb-next { top: auto; bottom: 14px; translate: none; }
   .lb-prev { left: calc(50% - 60px); }
