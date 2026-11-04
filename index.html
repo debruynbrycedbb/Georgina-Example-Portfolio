@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Georgina Marrison — Paintings</title>
+  <meta name="description" content="Walk a watercolour path through the trees toward the mountain, and arrive at a gallery of Georgina Marrison's paintings.">
+  <meta name="theme-color" content="#f6f1e6">
+  <meta property="og:title" content="Georgina Marrison — Paintings">
+  <meta property="og:description" content="Walk a watercolour path through the trees toward the mountain, and arrive at a gallery of Georgina Marrison's paintings.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="assets/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%235747a0'/%3E%3C/svg%3E">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Fonts load without blocking the first paint -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600&display=swap" media="print" onload="this.media='all'">
+
+  <link rel="preload" as="image" href="assets/scene/backdrop.webp" fetchpriority="high">
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    // Set before paint so the right layout shows straight away.
+    document.documentElement.classList.replace('no-js', 'js');
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.documentElement.classList.add('reduced-motion');
+    }
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#gallery">Skip to the gallery</a>
+
+  <header class="site-header">
+    <a class="wordmark" href="#top" aria-label="Georgina Marrison, back to the start">Georgina Marrison</a>
+    <a class="header-link" href="#gallery">Gallery</a>
+  </header>
+
+  <main id="top">
+    <!-- The walk: a tall section whose sticky stage stays on screen while you scroll -->
+    <section class="journey" aria-label="A walk along a watercolour path toward the mountain">
+      <div class="stage">
+        <canvas class="scene" role="img" aria-label="A watercolour path leading to a mountain. Slender trees pass by on either side as you scroll, until the scene fades to white paper."></canvas>
+
+        <!-- Shown when JavaScript is off or reduced motion is on -->
+        <img class="scene-static" data-src="assets/scene/backdrop.webp" width="1672" height="941"
+             alt="Watercolour of a pale path running across blue and violet washes toward a snowy mountain.">
+        <noscript><img class="scene-static" src="assets/scene/backdrop.webp" width="1672" height="941"
+             alt="Watercolour of a pale path running across blue and violet washes toward a snowy mountain."></noscript>
+
+        <div class="intro">
+          <h1 class="intro-title">Follow the path<em>to the mountain</em></h1>
+          <p class="scroll-cue"><span>Scroll to walk</span></p>
+        </div>
+
+        <div class="loader" aria-hidden="true">Wetting the paper…</div>
+        <div class="progress" aria-hidden="true"><span></span></div>
+      </div>
+    </section>
+
+    <section id="gallery" class="gallery" aria-labelledby="gallery-title">
+      <div class="gallery-head">
+        <p class="eyebrow">At the end of the path</p>
+        <h2 id="gallery-title">The gallery</h2>
+        <p class="gallery-intro">[Short introduction to the work, to be supplied]</p>
+      </div>
+
+      <ul class="gallery-grid">
+        <li><button class="artwork" data-full="assets/gallery/painting-1.webp" data-caption="[Painting title 1]">
+          <img src="assets/gallery/painting-1-sm.webp" width="800" height="406" loading="lazy" decoding="async" alt="[Description of painting 1]">
+        </button><p class="artwork-caption">[Painting title 1]<span>[Year · medium]</span></p></li>
+        <li><button class="artwork" data-full="assets/gallery/painting-2.webp" data-caption="[Painting title 2]">
+          <img src="assets/gallery/painting-2-sm.webp" width="647" height="800" loading="lazy" decoding="async" alt="[Description of painting 2]">
+        </button><p class="artwork-caption">[Painting title 2]<span>[Year · medium]</span></p></li>
+        <li><button class="artwork" data-full="assets/gallery/painting-3.webp" data-caption="[Painting title 3]">
+          <img src="assets/gallery/painting-3-sm.webp" width="500" height="378" loading="lazy" decoding="async" alt="[Description of painting 3]">
+        </button><p class="artwork-caption">[Painting title 3]<span>[Year · medium]</span></p></li>
+        <li><button class="artwork" data-full="assets/gallery/painting-4.webp" data-caption="[Painting title 4]">
+          <img src="assets/gallery/painting-4-sm.webp" width="639" height="800" loading="lazy" decoding="async" alt="[Description of painting 4]">
+        </button><p class="artwork-caption">[Painting title 4]<span>[Year · medium]</span></p></li>
+        <li><button class="artwork" data-full="assets/gallery/painting-5.webp" data-caption="[Painting title 5]">
+          <img src="assets/gallery/painting-5-sm.webp" width="457" height="672" loading="lazy" decoding="async" alt="[Description of painting 5]">
+        </button><p class="artwork-caption">[Painting title 5]<span>[Year · medium]</span></p></li>
+        <li><button class="artwork" data-full="assets/gallery/painting-6.webp" data-caption="[Painting title 6]">
+          <img src="assets/gallery/painting-6-sm.webp" width="600" height="800" loading="lazy" decoding="async" alt="[Description of painting 6]">
+        </button><p class="artwork-caption">[Painting title 6]<span>[Year · medium]</span></p></li>
+      </ul>
+
+      <a class="walk-again" href="#top">Walk the path again</a>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>© Georgina Marrison</p>
+    <p>[Contact email]</p>
+  </footer>
+
+  <dialog class="lightbox" aria-label="Painting viewer">
+    <figure>
+      <img alt="">
+      <figcaption></figcaption>
+    </figure>
+    <button class="lb-btn lb-prev" type="button" aria-label="Previous painting">←</button>
+    <button class="lb-btn lb-next" type="button" aria-label="Next painting">→</button>
+    <button class="lb-btn lb-close" type="button" aria-label="Close viewer">×</button>
+  </dialog>
+
+  <script src="js/scene.js" defer></script>
+  <script src="js/gallery.js" defer></script>
+</body>
+</html>
