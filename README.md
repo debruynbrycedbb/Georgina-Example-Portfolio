@@ -9,8 +9,9 @@ Scroll to walk a watercolour path toward the mountain. Slender trees pass the ca
   - **Ground:** drawn row by row in true perspective from a top-down texture (`ground.webp`). It moves at exactly the same speed as everything standing on it, so trees stay rooted.
   - **Trees:** cut-outs projected with the same camera (`size = focal / distance`). Near ones grow and slide off the sides, and far ones soften into the watercolour mist, then fade out. Each tree has a faint lavender ground shadow.
   - **Forest:** one row of trees lines the path, with a jittered grid of trees behind them on both sides. A clear corridor keeps the mountain in view.
-  - **Backdrop:** sky and mountains. They drift closer slowly, and at the end a paper-white glow fills the screen with the gallery's paper colour, so the hand-off is seamless.
+  - **Backdrop:** sky and mountains. They drift closer slowly, and at the end a paper-white glow fills the screen with the gallery's paper colour, so the hand-off is seamless. Soft margins (`backdrop-margins.webp`) sit behind the painting so the camera can pull back without showing its edges.
   - **Auto quality:** if frames run slow, it drops to 1× pixels, then thins the back of the forest.
+- `tools/make_backdrop_margins.py`: builds `backdrop-margins.webp`, the painting's edges continued outward and melting into bare paper.
 - `tools/make_ground.py`: rebuilds `ground.webp` from the backdrop. It un-warps the painted path and watercolour into a top-down tile that repeats seamlessly.
 - `js/gallery.js`: fades paintings in as they appear, and runs a lightbox (click, ← →, Esc).
 - No libraries and no build step.
@@ -23,6 +24,8 @@ Everything is in `CONFIG` at the top of `js/scene.js`:
 |---|---|
 | `walkLength` | metres walked; more = more trees pass you |
 | `walkShare` | share of the scroll spent walking (the rest is arriving in the light) |
+| `view` | camera zoom for desktop / phones; lower = pulled back, showing more treetops, sky and mountains |
+| `horizonOnScreen` | where the horizon sits on screen, for desktop / phones; lower on screen = more sky |
 | `eyeHeight` | camera height; lower = trees feel taller and closer |
 | `backdropZoom` / `arrivalZoom` | how much the background zooms while walking / at the end |
 | `trees.every`, `trees.setBack` | spacing of the trees along the path / how far back from the path they stand |
@@ -43,6 +46,7 @@ walkScene.config.walkLength = 90; walkScene.redraw();
 ## Assets
 
 - `assets/scene/backdrop.webp`: the watercolour with the path (also shown on its own when reduced motion is on or JavaScript is off)
+- `assets/scene/backdrop-margins.webp`: soft, low-resolution margins drawn behind the painting
 - `assets/scene/ground.webp`: top-down ground tile (made by `tools/make_ground.py`)
 - `assets/scene/tree-1…8.webp`: tree cut-outs, with the needle-point base trimmed so they sit on the ground (`-sm` versions are served to phones)
 - `assets/gallery/painting-1…11.webp`: gallery images (`-sm` = grid thumbnails)

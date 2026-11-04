@@ -35,7 +35,14 @@
 
     // Where the path disappears in backdrop.webp (fraction of width / height)
     vanishing: { x: 846 / 1672, y: 428 / 941 },
-    horizonOnScreen: 0.5,  // where the horizon sits on screen (fraction of height)
+    // where the horizon sits on screen (fraction of height); lower on phones = more sky and treetops
+    horizonOnScreen: { desktop: 0.5, phone: 0.57 },
+    // Camera zoom: 1 = the painting just fills the screen, lower = pulled back to see more
+    // (more of the treetops, sky and mountains). Phones are pulled back further.
+    view: { desktop: 0.78, phone: 0.6 },
+    // The painting, plus soft margins drawn behind it (tools/make_backdrop_margins.py)
+    // so the camera can pull back without showing its edges
+    backdrop: { file: 'backdrop.webp', margins: 'backdrop-margins.webp', w: 1672, h: 941, pad: { l: 320, t: 540 } },
 
     // Path edges in metres (negative = left), as painted in the backdrop
     pathLeft: -0.55,
@@ -66,7 +73,8 @@
     { file: 'tree-7.webp', trunkX: 0.440 },
     { file: 'tree-8.webp', trunkX: 0.266 },
   ];
-  const BACKDROP = { file: 'backdrop.webp' };
+  const BACKDROP = { file: CONFIG.backdrop.file };
+  const MARGINS = { file: CONFIG.backdrop.margins };
   const GROUND = { file: CONFIG.ground.file };
 
   // Phones get lighter cut-outs (55% size) — the watercolour style hides the softness
@@ -121,6 +129,25 @@
     r.addColorStop(1, 'rgba(110, 104, 170, 0)');
     g.fillStyle = r;
     g.fillRect(0, 0, 128, 128);
+  }
+
+  // Fade the painting's sides and top into the soft margins drawn behind it (no hard seam)
+  function featherBackdrop() {
+    const img = BACKDROP.img, w = img.naturalWidth, h = img.naturalHeight, e = Math.round(w * 0.05);
+    const c = document.createElement('canvas');
+    c.width = w; c.height = h;
+    const g = c.getContext('2d');
+    g.drawImage(img, 0, 0);
+    g.globalCompositeOperation = 'destination-out';
+    for (const [x0, y0, x1, y1, rx, ry, rw, rh] of [
+      [0, 0, e, 0, 0, 0, e, h], [w, 0, w - e, 0, w - e, 0, e, h], [0, 0, 0, e, 0, 0, w, e]]) {
+      const gr = g.createLinearGradient(x0, y0, x1, y1);
+      gr.addColorStop(0, 'rgba(0,0,0,1)');
+      gr.addColorStop(1, 'rgba(0,0,0,0)');
+      g.fillStyle = gr;
+      g.fillRect(rx, ry, rw, rh);
+    }
+    BACKDROP.img = c;
   }
 
   /* ---------- build the world (deterministic) ---------- */
@@ -180,14 +207,15 @@
     canvas.width = Math.round(W * dpr);
     canvas.height = Math.round(H * dpr);
 
-    const bw = BACKDROP.img ? BACKDROP.img.naturalWidth : 1672;
-    const bh = BACKDROP.img ? BACKDROP.img.naturalHeight : 941;
-    const vx = CONFIG.vanishing.x, vy = CONFIG.vanishing.y;
-    // scale so the backdrop covers the screen with the vanishing point centred
-    base = Math.max(W / (2 * Math.min(vx, 1 - vx) * bw), H / bh);
+    const bw = CONFIG.backdrop.w, bh = CONFIG.backdrop.h; // the painting itself (without margins)
+    const vx = CONFIG.vanishing.x;
+    // the scale at which the painting just covers the screen with the vanishing point centred,
+    // then pulled back by the camera zoom (the soft margins fill the extra room)
+    const device = W / H < 1 ? 'phone' : 'desktop';
+    const zoom = CONFIG.view[device];
+    base = Math.max(W / (2 * Math.min(vx, 1 - vx) * bw), H / bh) * zoom;
     cx = W / 2;
-    const top = Math.min(0, Math.max(H - bh * base, H * CONFIG.horizonOnScreen - vy * bh * base));
-    horizonY = top + vy * bh * base;
+    horizonY = H * CONFIG.horizonOnScreen[device];
     focal = bh * base;                                   // px per metre at 1 m distance
     xSquash = Math.min(1, Math.max(0.5, (W / H) / 1.5)); // pull the sides inward on tall phones
   }
@@ -263,8 +291,14 @@
     // 1. Backdrop (distant sky, canopy and light), drifting closer slowly
     if (BACKDROP.img) {
       const s = base * (1 + CONFIG.backdropZoom * walk) * arrival;
-      const iw = BACKDROP.img.naturalWidth, ih = BACKDROP.img.naturalHeight;
-      ctx.drawImage(BACKDROP.img, cx - CONFIG.vanishing.x * iw * s, horizonY - CONFIG.vanishing.y * ih * s, iw * s, ih * s);
+      const B = CONFIG.backdrop;
+      const x0 = cx - CONFIG.vanishing.x * B.w * s, y0 = horizonY - CONFIG.vanishing.y * B.h * s;
+      const M = MARGINS.img;
+      if (M) { // soft margins first (low-res image covering the painting plus its margins)
+        const k = (B.w + 2 * B.pad.l) / M.naturalWidth; // margin-image px -> painting px
+        ctx.drawImage(M, x0 - B.pad.l * s, y0 - B.pad.t * s, M.naturalWidth * k * s, M.naturalHeight * k * s);
+      }
+      ctx.drawImage(BACKDROP.img, x0, y0, B.w * s, B.h * s);
     }
 
     // 2. Ground
@@ -359,8 +393,9 @@
   function onResize() { layout(); readScroll(); render(current); }
 
   // Backdrop + ground first, then the cut-outs
-  Promise.all([load(BACKDROP), load(GROUND)]).then(() => {
+  Promise.all([load(BACKDROP), load(MARGINS), load(GROUND)]).then(() => {
     if (GROUND.img) makeMips();
+    if (BACKDROP.img && MARGINS.img) featherBackdrop();
     layout(); readScroll(); current = target; render(current);
     return Promise.all(TREES.map(load));
   }).then(() => {

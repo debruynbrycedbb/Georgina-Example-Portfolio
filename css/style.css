@@ -95,7 +95,7 @@ a { color: inherit; }
   /* large viewport height: stays full-screen when the phone's address bar collapses */
   height: 100vh; height: 100lvh;
   overflow: hidden;
-  background: #cfe3f1 url("../assets/scene/backdrop.webp") 50.6% 45% / cover no-repeat;
+  background: #f6f1e6 url("../assets/scene/backdrop.webp") 50.6% 45% / cover no-repeat;
 }
 .scene { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .scene-static { display: none; }
